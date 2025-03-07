@@ -4,7 +4,8 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                echo 'Cloning repository from GitHub...'
+                echo 'Cleaning workspace and cloning repo...'
+                deleteDir()
                 git 'https://github.com/Henry-0810/spring-petclinic_DevOps_Project.git'
             }
         }

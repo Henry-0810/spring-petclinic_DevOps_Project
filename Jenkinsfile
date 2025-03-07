@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 echo 'Cloning repository from GitHub...'
-                git branch: 'cicd-pipeline', url: 'https://github.com/Henry-0810/spring-petclinic_DevOps_Project.git'
+                git 'https://github.com/Henry-0810/spring-petclinic_DevOps_Project.git'
             }
         }
 
@@ -17,20 +17,20 @@ pipeline {
             }
         }
 
-//         stage('Code Quality Analysis - SonarCloud') {
-//             steps {
-//                 echo 'Running SonarCloud Analysis...'
-//                 withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
-//                     sh '''
-//                     mvn sonar:sonar \
-//                         -Dsonar.projectKey=your-sonarcloud-project-key \
-//                         -Dsonar.organization=your-sonarcloud-organization \
-//                         -Dsonar.host.url=https://sonarcloud.io \
-//                         -Dsonar.login=$SONAR_TOKEN
-//                     '''
-//                 }
-//             }
-//         }
+        stage('Code Quality Analysis - SonarCloud') {
+            steps {
+                echo 'Running SonarCloud Analysis...'
+                withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+                    sh '''
+                    mvn clean verify sonar:sonar \
+                        -Dsonar.projectKey=Henry-0810_spring-petclinic_DevOps_Project \
+                        -Dsonar.organization=henry-0810 \
+                        -Dsonar.host.url=https://sonarcloud.io \
+                        -Dsonar.login=$SONAR_TOKEN
+                    '''
+                }
+            }
+        }
 //
 //         stage('Security Scan - Trivy') {
 //             steps {

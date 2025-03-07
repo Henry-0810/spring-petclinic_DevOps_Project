@@ -25,6 +25,7 @@ pipeline {
                     mvn clean verify sonar:sonar \
                         -Dsonar.projectKey=Henry-0810_spring-petclinic_DevOps_Project \
                         -Dsonar.organization=henry-0810 \
+                        -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
                         -Dsonar.host.url=https://sonarcloud.io \
                         -Dsonar.login=$SONAR_TOKEN
                     '''

@@ -32,21 +32,24 @@ pipeline {
                 }
             }
         }
-//
+
+        stage('Build Docker Image') {
+            steps {
+                echo 'Building Docker image...'
+                sh 'docker build -t henry0810/spring-petclinic .'
+            }
+        }
+
+
 //         stage('Security Scan - Trivy') {
 //             steps {
 //                 echo 'Running security scan on Docker image...'
-//                 sh 'trivy image --exit-code 1 --severity HIGH,CRITICAL your-dockerhub-username/spring-petclinic || true'
+//                 sh 'trivy image --exit-code 1 --severity HIGH,CRITICAL henry0810/spring-petclinic || true'
 //             }
 //         }
-//
-//         stage('Build Docker Image') {
-//             steps {
-//                 echo 'Building Docker image...'
-//                 sh 'docker build -t your-dockerhub-username/spring-petclinic .'
-//             }
-//         }
-//
+
+
+
 //         stage('Push to Docker Hub') {
 //             steps {
 //                 echo 'Pushing Docker image to registry...'

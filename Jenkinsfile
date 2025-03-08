@@ -63,7 +63,7 @@ pipeline {
             }
         }
 
-        stage('Notify') {
+        stage('Notify Email') {
             steps {
                 echo 'Sending email notification...'
                 emailext subject: "Jenkins Build ${currentBuild.result}",
@@ -72,7 +72,7 @@ pipeline {
             }
         }
 
-        stage('Notify') {
+        stage('GitHub CI Status') {
             steps {
                 echo 'Updating GitHub commit status...'
                 withCredentials([string(credentialsId: 'github-credentials', variable: 'GITHUB_TOKEN')]) {

@@ -41,28 +41,18 @@ pipeline {
             }
         }
 
+        stage('Push to Docker Hub') {
+            steps {
+                echo 'Pushing Docker image to registry...'
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_TOKEN')]) {
+                    sh '''
+                    echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USER" --password-stdin
+                    docker push henry0810/spring-petclinic
+                    '''
+                }
+            }
+        }
 
-//         stage('Security Scan - Trivy') {
-//             steps {
-//                 echo 'Running security scan on Docker image...'
-//                 sh 'trivy image --exit-code 1 --severity HIGH,CRITICAL henry0810/spring-petclinic || true'
-//             }
-//         }
-
-
-
-//         stage('Push to Docker Hub') {
-//             steps {
-//                 echo 'Pushing Docker image to registry...'
-//                 withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-//                     sh '''
-//                     echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-//                     docker push your-dockerhub-username/spring-petclinic
-//                     '''
-//                 }
-//             }
-//         }
-//
 //         stage('Notify') {
 //             steps {
 //                 echo 'Sending Slack notification...'

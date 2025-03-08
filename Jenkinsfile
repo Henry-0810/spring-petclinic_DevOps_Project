@@ -63,26 +63,36 @@ pipeline {
             }
         }
 
-//         stage('Notify') {
-//             steps {
-//                 echo 'Sending Slack notification...'
-//                 withCredentials([string(credentialsId: 'slack-webhook', variable: 'SLACK_WEBHOOK')]) {
-//                     sh '''
-//                     curl -X POST --data-urlencode "payload={\\"channel\\": \\"#devops\\", \\"username\\": \\"jenkins\\", \\"text\\": \\"Build successful!\\"}" $SLACK_WEBHOOK
-//                     '''
-//                 }
-//             }
-//         }
+        stage('Notify') {
+            steps {
+                echo 'Sending email notification...'
+                emailext subject: "Jenkins Build ${currentBuild.result}",
+                         body: "The build has completed with status: ${currentBuild.result}. Check Jenkins for details.",
+                         to: "munli2002@gmail.com"
+            }
+        }
+
+        stage('Notify') {
+            steps {
+                echo 'Updating GitHub commit status...'
+                withCredentials([string(credentialsId: 'github-credentials', variable: 'GITHUB_TOKEN')]) {
+                    sh '''
+                    curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
+                         -d '{"state": "success", "description": "Jenkins Build Passed!", "context": "continuous-integration/jenkins"}' \
+                         https://api.github.com/repos/your-username/spring-petclinic/statuses/$GIT_COMMIT
+                    '''
+                }
+            }
+        }
     }
 
-//     post {
-//         failure {
-//             echo 'Pipeline failed! Sending failure notification...'
-//             withCredentials([string(credentialsId: 'slack-webhook', variable: 'SLACK_WEBHOOK')]) {
-//                 sh '''
-//                 curl -X POST --data-urlencode "payload={\\"channel\\": \\"#devops\\", \\"username\\": \\"jenkins\\", \\"text\\": \\"Build failed! Check Jenkins logs.\\"}" $SLACK_WEBHOOK
-//                 '''
-//             }
-//         }
-//     }
+    post {
+        failure {
+            echo 'Pipeline failed! Sending email notification...'
+            emailext subject: "Jenkins Build FAILED",
+                     body: "The build has FAILED! Check Jenkins logs for details.",
+                     to: "munli2002@gmail.com"
+        }
+    }
+
 }

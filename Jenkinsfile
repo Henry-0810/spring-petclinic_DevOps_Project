@@ -37,7 +37,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo 'Building Docker image...'
-                sh 'docker build -t henry0810/spring-petclinic .'
+                sh 'DOCKER_HOST=unix:///var/run/docker.sock docker build -t henry0810/spring-petclinic .'
             }
         }
 

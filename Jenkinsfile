@@ -36,8 +36,18 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                echo 'Building Docker image...'
-                sh 'DOCKER_HOST=unix:///var/run/docker.sock docker build -t henry0810/spring-petclinic .'
+                    echo 'Building Docker image...'
+                    sh '''
+                    export DOCKER_BUILDKIT=0
+                    docker build -t henry0810/spring-petclinic .
+                    '''
+                }
+        }
+
+        stage('Verify Docker Image') {
+            steps {
+                echo 'Checking Docker images before pushing...'
+                sh 'docker images'
             }
         }
 

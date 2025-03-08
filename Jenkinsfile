@@ -86,7 +86,7 @@ pipeline {
                     curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
                          -H "Accept: application/vnd.github.v3+json" \
                          -d '{"state": "success", "description": "Jenkins Build Passed!", "context": "continuous-integration/jenkins"}' \
-                         https://api.github.com/repos/your-username/spring-petclinic/statuses/$GIT_COMMIT
+                         https://api.github.com/repos/henry-0810/spring-petclinic/statuses/$GIT_COMMIT
                     '''
                 }
             }

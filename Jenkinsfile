@@ -66,9 +66,15 @@ pipeline {
         stage('Notify Email') {
             steps {
                 echo 'Sending email notification...'
-                emailext subject: "Jenkins Build ${currentBuild.result}",
-                         body: "The build has completed with status: ${currentBuild.result}. Check Jenkins for details.",
-                         to: "munli2002@gmail.com"
+                script {
+                    try {
+                        emailext subject: "Jenkins Build ${currentBuild.result}",
+                                 body: "The build has completed with status: ${currentBuild.result}. Check Jenkins for details.",
+                                 to: "munli2002@gmail.com"
+                    } catch (Exception e) {
+                        echo 'Email notification failed!'
+                    }
+                }
             }
         }
 
@@ -78,6 +84,7 @@ pipeline {
                 withCredentials([string(credentialsId: 'github-credentials', variable: 'GITHUB_TOKEN')]) {
                     sh '''
                     curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
+                         -H "Accept: application/vnd.github.v3+json" \
                          -d '{"state": "success", "description": "Jenkins Build Passed!", "context": "continuous-integration/jenkins"}' \
                          https://api.github.com/repos/your-username/spring-petclinic/statuses/$GIT_COMMIT
                     '''

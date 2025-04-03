@@ -62,22 +62,25 @@ pipeline {
                 }
             }
         }
+    }
 
-        stage('Notify Email') {
-            steps {
-                echo 'Sending email notification...'
-                emailext (
-                    subject: "Jenkins Build ${currentBuild.result}",
-                    body: "The build has completed with status: ${currentBuild.result}. Check Jenkins for details.",
-                    to: "munli2002@gmail.com"
-                )
-
-            }
+    post {
+        success {
+            echo 'Build succeeded. Sending email notification...'
+            emailext(
+                subject: "Jenkins Build SUCCESS",
+                body: "The build completed successfully. Check Jenkins for more info.",
+                to: "munli2002@gmail.com"
+            )
         }
-
-        stage('GitHub CI Status') {
-            steps {
-                echo 'Updating GitHub commit status...'
+        failure {
+            echo 'Pipeline failed! Sending email notification...'
+            emailext subject: "Jenkins Build FAILED",
+                     body: "The build has FAILED! Check Jenkins logs for details.",
+                     to: "munli2002@gmail.com"
+        }
+        success {
+                echo 'Build succeeded. Updating GitHub status...'
                 withCredentials([string(credentialsId: 'github-credentials', variable: 'GITHUB_TOKEN')]) {
                     sh '''
                     curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
@@ -87,15 +90,16 @@ pipeline {
                     '''
                 }
             }
-        }
-    }
-
-    post {
         failure {
-            echo 'Pipeline failed! Sending email notification...'
-            emailext subject: "Jenkins Build FAILED",
-                     body: "The build has FAILED! Check Jenkins logs for details.",
-                     to: "munli2002@gmail.com"
+            echo 'Build failed. Updating GitHub status...'
+            withCredentials([string(credentialsId: 'github-credentials', variable: 'GITHUB_TOKEN')]) {
+                sh '''
+                curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
+                     -H "Accept: application/vnd.github.v3+json" \
+                     -d '{"state": "failure", "description": "Jenkins Build Failed!", "context": "continuous-integration/jenkins"}' \
+                     https://api.github.com/repos/henry-0810/spring-petclinic/statuses/$GIT_COMMIT
+                '''
+            }
         }
     }
 

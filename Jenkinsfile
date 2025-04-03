@@ -69,8 +69,7 @@ pipeline {
                 emailext (
                     subject: "Jenkins Build ${currentBuild.result}",
                     body: "The build has completed with status: ${currentBuild.result}. Check Jenkins for details.",
-                    to: "munli2002@gmail.com",
-                    debug: true
+                    to: "munli2002@gmail.com"
                 )
 
             }

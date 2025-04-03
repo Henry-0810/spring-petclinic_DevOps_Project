@@ -66,15 +66,9 @@ pipeline {
         stage('Notify Email') {
             steps {
                 echo 'Sending email notification...'
-                script {
-                    try {
-                        emailext subject: "Jenkins Build ${currentBuild.result}",
+                emailext subject: "Jenkins Build ${currentBuild.result}",
                                  body: "The build has completed with status: ${currentBuild.result}. Check Jenkins for details.",
                                  to: "munli2002@gmail.com"
-                    } catch (Exception e) {
-                        echo 'Email notification failed!'
-                    }
-                }
             }
         }
 

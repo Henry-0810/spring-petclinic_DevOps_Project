@@ -91,6 +91,7 @@ resource "aws_instance" "springboot" {
   instance_type = "t2.micro"
   key_name      = var.key_name             # Will need to upload/create this in EC2
   security_groups = [aws_security_group.spring_sg.name]
+  monitoring = true
 
   user_data = <<-EOF
               #!/bin/bash
@@ -138,3 +139,38 @@ resource "aws_security_group" "spring_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+# CloudWatch CPU alarm
+resource "aws_cloudwatch_metric_alarm" "high_cpu" {
+  alarm_name          = "HighCPUAlert"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 2
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/EC2"
+  period              = 300
+  statistic           = "Average"
+  threshold           = 70
+  alarm_description   = "Alarm when CPU usage exceeds 70%"
+  alarm_actions       = [aws_sns_topic.alerts.arn]
+
+  dimensions = {
+    InstanceId = aws_instance.springboot.id
+  }
+
+  tags = {
+    Name = "HighCPUAlert"
+  }
+}
+
+# SNS Topic for alerts
+resource "aws_sns_topic" "alerts" {
+  name = "devops-alerts"
+}
+
+# SNS Email Subscription
+resource "aws_sns_topic_subscription" "email_sub" {
+  topic_arn = aws_sns_topic.alerts.arn
+  protocol  = "email"
+  endpoint  = "munli2002@gmail.com"
+}
+

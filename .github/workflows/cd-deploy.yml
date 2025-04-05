@@ -28,6 +28,11 @@ jobs:
         with:
           terraform_version: 1.11.3
 
+      - name: Authenticate to Terraform Cloud
+        run: |
+          mkdir -p ~/.terraform.d
+          echo '{"credentials":{"app.terraform.io":{"token":"${{ secrets.TERRAFORM_CLOUD_TOKEN }}"}}}' > ~/.terraform.d/credentials.tfrc.json
+
       - name: Terraform Init
         run: terraform -chdir=infra init
 

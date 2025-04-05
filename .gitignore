@@ -49,3 +49,6 @@ out/
 _site/
 *.css
 !petclinic.css
+
+infra/terraform.tfvars
+spring-key.pem

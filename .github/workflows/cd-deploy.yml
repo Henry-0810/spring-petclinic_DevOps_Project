@@ -1,4 +1,4 @@
-name: CD - Deploy to AWS via Terraform
+name: CD - Deploy to AWS via Terraform Cloud
 
 on:
   push:
@@ -7,15 +7,16 @@ on:
 
 jobs:
   deploy:
-    name: Deploy Spring App via Terraform
+    name: Deploy Spring App via Terraform Cloud
     runs-on: ubuntu-latest
 
     env:
       TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
       TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      TF_VAR_aws_session_key: ${{ secrets.AWS_SESSION_TOKEN }}
+      TF_VAR_aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}
       TF_VAR_aws_region: ${{ secrets.AWS_REGION }}
       TF_VAR_key_name: ${{ secrets.AWS_EC2_KEY_NAME }}
+      TF_CLOUD_TOKEN_app_terraform_io: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
       TF_IN_AUTOMATION: true
 
     steps:
@@ -29,6 +30,9 @@ jobs:
 
       - name: Terraform Init
         run: terraform -chdir=infra init
+
+      - name: Terraform Plan
+        run: terraform -chdir=infra plan
 
       - name: Terraform Apply
         run: terraform -chdir=infra apply -auto-approve

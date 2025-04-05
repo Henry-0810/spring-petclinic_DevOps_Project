@@ -1,3 +1,13 @@
+terraform {
+  cloud {
+
+    organization = "Henry-DevOps-Project"
+
+    workspaces {
+      name = "spring-petclinic-devops"
+    }
+  }
+}
 provider "aws" {
   region     = var.aws_region
   access_key = var.aws_access_key

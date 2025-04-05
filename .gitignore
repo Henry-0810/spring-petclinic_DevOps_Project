@@ -52,3 +52,8 @@ _site/
 
 infra/terraform.tfvars
 spring-key.pem
+
+infra/.terraform/
+infra/.terraform.lock.hcl
+infra/terraform.tfstate
+infra/terraform.tfstate.backup

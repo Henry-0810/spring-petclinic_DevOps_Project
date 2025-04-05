@@ -8,4 +8,4 @@
 
 ## 📊 Monitoring Snapshot
 
-![CPU Monitoring](docs/cpu-monitoring.png)
+![CPU Monitoring](docs/CloudMonitoringTesting.png)

@@ -52,6 +52,7 @@ _site/
 
 infra/terraform.tfvars
 spring-key.pem
+spring-key-2.pem
 
 infra/.terraform/
 infra/.terraform.lock.hcl

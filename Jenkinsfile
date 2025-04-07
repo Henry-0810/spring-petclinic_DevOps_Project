@@ -88,7 +88,6 @@ pipeline {
 
             echo 'CI Passed. Triggering GitHub CD pipeline...'
 
-                    // Trigger GitHub Actions workflow
                     withCredentials([string(credentialsId: 'github-credentials', variable: 'GITHUB_TOKEN')]) {
                         sh '''
                         curl -X POST \

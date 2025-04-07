@@ -90,7 +90,7 @@ resource "aws_lb_listener" "https_listener" {
 resource "aws_instance" "springboot" {
   ami           = "ami-0c02fb55956c7d316"  # Amazon Linux 2 for us-east-1
   instance_type = "t2.micro"
-  key_name      = var.key_name             # Will need to upload/create this in EC2
+  key_name      = var.key_name
   security_groups = [aws_security_group.spring_sg.name]
   monitoring = true
 

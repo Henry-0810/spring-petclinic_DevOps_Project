@@ -109,7 +109,6 @@ pipeline {
                 to: "munli2002@gmail.com"
             )
 
-            // GitHub status update
             withCredentials([string(credentialsId: 'github-credentials', variable: 'GITHUB_TOKEN')]) {
                 sh '''
                 curl -X POST -H "Authorization: token $GITHUB_TOKEN" \

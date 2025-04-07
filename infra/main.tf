@@ -49,7 +49,7 @@ resource "aws_lb" "spring_lb" {
 
 resource "aws_lb_target_group" "spring_tg" {
   name     = "spring-tg"
-  port     = 80
+  port     = 8080
   protocol = "HTTP"
   vpc_id   = data.aws_vpc.default.id
 
@@ -60,6 +60,7 @@ resource "aws_lb_target_group" "spring_tg" {
     healthy_threshold   = 2
     unhealthy_threshold = 2
     matcher             = "200"
+    port                = "8080"
   }
 
   tags = {
@@ -70,7 +71,7 @@ resource "aws_lb_target_group" "spring_tg" {
 resource "aws_lb_target_group_attachment" "spring_target" {
   target_group_arn = aws_lb_target_group.spring_tg.arn
   target_id        = aws_instance.springboot.id
-  port             = 80
+  port             = 8080
 }
 
 resource "aws_lb_listener" "https_listener" {

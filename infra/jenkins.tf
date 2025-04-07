@@ -63,7 +63,12 @@ resource "aws_instance" "jenkins" {
   }
 }
 
+resource "aws_eip" "jenkins_eip" {
+  instance = aws_instance.jenkins.id
+  vpc      = true
+}
+
 output "jenkins_public_ip" {
-  description = "Jenkins Public IP"
-  value       = aws_instance.jenkins.public_ip
+  description = "Elastic IP of Jenkins server"
+  value       = aws_eip.jenkins_eip.public_ip
 }

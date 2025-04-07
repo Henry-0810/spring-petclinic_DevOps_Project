@@ -6,7 +6,7 @@ pipeline {
             steps {
                 echo 'Cleaning workspace and cloning repo...'
                 deleteDir()
-                git credentialsId: 'github-credentials', branch: 'main', url: 'https://github.com/Henry-0810/spring-petclinic_DevOps_Project.git'
+                git branch: 'main', url: 'https://github.com/Henry-0810/spring-petclinic_DevOps_Project.git'
             }
         }
 

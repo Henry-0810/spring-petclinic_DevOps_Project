@@ -85,6 +85,18 @@ pipeline {
                      https://api.github.com/repos/henry-0810/spring-petclinic_DevOps_Project/statuses/$GIT_COMMIT
                 '''
             }
+
+            echo 'CI Passed. Triggering GitHub CD pipeline...'
+
+                    // Trigger GitHub Actions workflow
+                    withCredentials([string(credentialsId: 'github-credentials', variable: 'GITHUB_TOKEN')]) {
+                        sh '''
+                        curl -X POST \
+                          -H "Authorization: token $GITHUB_TOKEN" \
+                          -H "Accept: application/vnd.github.v3+json" \
+                          https://api.github.com/repos/Henry-0810/spring-petclinic_DevOps_Project/actions/workflows/cd-deploy.yml/dispatches \
+                          -d '{"ref":"main"}'
+                        '''
         }
 
         failure {
@@ -106,6 +118,8 @@ pipeline {
                      https://api.github.com/repos/henry-0810/spring-petclinic_DevOps_Project/statuses/$GIT_COMMIT
                 '''
             }
+
+            echo 'CI failed. Skipping GitHub CD trigger.'
         }
     }
 

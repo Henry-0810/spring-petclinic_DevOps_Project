@@ -97,6 +97,7 @@ pipeline {
                           https://api.github.com/repos/Henry-0810/spring-petclinic_DevOps_Project/actions/workflows/cd-deploy.yml/dispatches \
                           -d '{"ref":"main"}'
                         '''
+                    }
         }
 
         failure {

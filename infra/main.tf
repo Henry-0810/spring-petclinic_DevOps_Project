@@ -88,7 +88,7 @@ resource "aws_lb_listener" "https_listener" {
 }
 
 resource "aws_instance" "springboot" {
-  ami           = "ami-0c02fb55956c7d316"  # Amazon Linux 2 for us-east-1
+  ami           = "ami-0c02fb55956c7d316"  # Amazon Linux 2 for us-east-1, true
   instance_type = "t2.micro"
   key_name      = var.key_name
   security_groups = [aws_security_group.spring_sg.name]

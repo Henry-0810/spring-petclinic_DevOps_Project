@@ -99,6 +99,12 @@ resource "aws_lb_target_group" "spring_tg" {
   }
 }
 
+resource "aws_lb_target_group_attachment" "spring_target" {
+  target_group_arn = aws_lb_target_group.spring_tg.arn
+  target_id        = aws_instance.springboot.id
+  port             = 80
+}
+
 resource "aws_lb_listener" "https_listener" {
   load_balancer_arn = aws_lb.spring_lb.arn
   port              = 443
@@ -158,12 +164,6 @@ resource "aws_instance" "springboot" {
   tags = {
     Name = "SpringBootApp"
   }
-}
-
-resource "aws_lb_target_group_attachment" "spring_target" {
-  target_group_arn = aws_lb_target_group.spring_tg.arn
-  target_id        = aws_instance.springboot.id
-  port             = 80
 }
 
 resource "aws_cloudwatch_metric_alarm" "high_cpu" {
